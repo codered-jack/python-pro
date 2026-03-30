@@ -18,8 +18,14 @@ class CafeManager:
         try:
             with open(file=self._data_file, mode="r", encoding="utf-8", newline='') as f:
                 reader = csv.reader(f)
-                cafe_header = next(reader, DEFAULT_HEADER)  # first row only
-                cafe_list = list(reader)  # remaining rows
+                cafe_header = []
+                cafe_list = []
+                for row in reader:
+                    # keep the header separate from the cafes
+                    if len(cafe_header) == 0:
+                        cafe_header = row
+                    else:
+                        cafe_list.append(row)
         except FileNotFoundError as ex:
             # return the default header and an empty list of cafes,
             # to make sure the page is rendered correctly, even with no data
